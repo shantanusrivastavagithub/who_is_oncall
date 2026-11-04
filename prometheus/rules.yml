@@ -1,0 +1,35 @@
+groups:
+  - name: APM_Mathematical_Limits
+    rules:
+      - alert: CriticalErrorRate
+        expr: error_rate_pct > 20
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Error Rate Spike on {{ $labels.service }}"
+          description: "Service {{ $labels.service }} is experiencing a {{ $value }}% error rate."
+      - alert: SevereLatency
+        expr: web_transaction_total_ms > 150
+        for: 15s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Latency on {{ $labels.service }}"
+          description: "Requests to {{ $labels.service }} are taking {{ $value }}ms on average."
+      - alert: ApdexDegradation
+        expr: apdex_app_server < 0.75
+        for: 20s
+        labels:
+          severity: high
+        annotations:
+          summary: "Poor User Experience on {{ $labels.service }}"
+          description: "The Apdex score for {{ $labels.service }} has dropped to {{ $value }}."
+      - alert: TrafficSurge
+        expr: throughput_rpm > 90
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Traffic Spike on {{ $labels.service }}"
+          description: "{{ $labels.service }} is receiving {{ $value }} RPM, exceeding safe limits."

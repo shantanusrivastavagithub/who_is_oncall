@@ -1,0 +1,5 @@
+Service Name,Current On-Call,Shift Start (From),Shift End (To),Next On-Call
+CarvedRockWebShop (Checkout),Alice (L1),08:00 AM,04:00 PM,Bob (L2)
+Authentication Service,Charlie (L1),08:00 AM,04:00 PM,Dave (L2)
+Inventory DB Helper,Eve (L1),08:00 AM,04:00 PM,Frank (L2)
+Payment Gateway,Grace (L1),08:00 AM,04:00 PM,Heidi (L2)

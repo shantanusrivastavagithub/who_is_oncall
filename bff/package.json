@@ -1,0 +1,11 @@
+{
+  "name": "whoisoncall-bff",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "axios": "^1.7.2",
+    "@slack/bolt": "^3.19.0"
+  }
+}

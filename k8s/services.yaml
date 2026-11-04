@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout-service
+  namespace: whoisoncall
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: checkout-service
+  template:
+    metadata:
+      labels:
+        app: checkout-service
+    spec:
+      containers:
+      - name: backend
+        image: whoisoncall-backend:latest
+        imagePullPolicy: Never
+        env:
+        - name: PORT
+          value: "3000"
+        - name: SERVICE_ID
+          value: "checkout-service"
+        - name: SERVICE_NAME
+          value: "CarvedRockWebShop (Checkout)"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: checkout-service
+  namespace: whoisoncall
+spec:
+  selector:
+    app: checkout-service
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: whoisoncall
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+      - name: backend
+        image: whoisoncall-backend:latest
+        imagePullPolicy: Never
+        env:
+        - name: PORT
+          value: "3000"
+        - name: SERVICE_ID
+          value: "auth-service"
+        - name: SERVICE_NAME
+          value: "Authentication Service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: whoisoncall
+spec:
+  selector:
+    app: auth-service
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-service
+  namespace: whoisoncall
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-service
+  template:
+    metadata:
+      labels:
+        app: inventory-service
+    spec:
+      containers:
+      - name: backend
+        image: whoisoncall-backend:latest
+        imagePullPolicy: Never
+        env:
+        - name: PORT
+          value: "3000"
+        - name: SERVICE_ID
+          value: "inventory-service"
+        - name: SERVICE_NAME
+          value: "Inventory DB Helper"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-service
+  namespace: whoisoncall
+spec:
+  selector:
+    app: inventory-service
+  ports:
+    - port: 3000
+      targetPort: 3000

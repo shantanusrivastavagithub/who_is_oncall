@@ -1,0 +1,17 @@
+{
+  "checkout-service": {
+    "errorRateLimit": 5.0,
+    "responseTimeLimit": 20.0,
+    "apdexMinLimit": 0.85
+  },
+  "auth-service": {
+    "errorRateLimit": 5.0,
+    "responseTimeLimit": 25.0,
+    "apdexMinLimit": 0.80
+  },
+  "inventory-service": {
+    "errorRateLimit": 10.0,
+    "responseTimeLimit": 30.0,
+    "apdexMinLimit": 0.75
+  }
+}

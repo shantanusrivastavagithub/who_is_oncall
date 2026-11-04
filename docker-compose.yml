@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: whoisoncall_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    depends_on:
+      - bff
+
+  bff:
+    build:
+      context: ./bff
+      dockerfile: Dockerfile
+    container_name: whoisoncall_bff
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+    env_file:
+      - ./bff/.env
+    restart: unless-stopped
+    depends_on:
+      - checkout-service
+      - auth-service
+      - inventory-service
+
+  checkout-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: whoisoncall_checkout
+    environment:
+      - PORT=3000
+      - SERVICE_ID=checkout-service
+      - SERVICE_NAME=CarvedRockWebShop (Checkout)
+    restart: unless-stopped
+
+  auth-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: whoisoncall_auth
+    environment:
+      - PORT=3000
+      - SERVICE_ID=auth-service
+      - SERVICE_NAME=Authentication Service
+    restart: unless-stopped
+
+  inventory-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: whoisoncall_inventory
+    environment:
+      - PORT=3000
+      - SERVICE_ID=inventory-service
+      - SERVICE_NAME=Inventory DB Helper
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: whoisoncall_prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    depends_on:
+      - checkout-service
+      - auth-service
+      - inventory-service
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: whoisoncall_grafana
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3001:3000"
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: whoisoncall_alertmanager
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - "9093:9093"
+    restart: unless-stopped
+    depends_on:
+      - bff

@@ -1,0 +1,10 @@
+route:
+  receiver: 'bff_webhook'
+  group_wait: 1s
+  group_interval: 1s
+  repeat_interval: 1m
+
+receivers:
+  - name: 'bff_webhook'
+    webhook_configs:
+      - url: 'http://bff:4000/api/webhook/alert'
